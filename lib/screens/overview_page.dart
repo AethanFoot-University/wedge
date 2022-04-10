@@ -5,14 +5,14 @@ import 'package:pnet/screens/asset_screen.dart';
 
 import '../theme.dart';
 
-class WalletOverview extends StatefulWidget {
-  const WalletOverview({Key? key}) : super(key: key);
+class OverviewPage extends StatefulWidget {
+  const OverviewPage({Key? key}) : super(key: key);
 
   @override
-  _WalletOverviewState createState() => _WalletOverviewState();
+  _OverviewPageState createState() => _OverviewPageState();
 }
 
-class _WalletOverviewState extends State<WalletOverview> {
+class _OverviewPageState extends State<OverviewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +40,42 @@ class _WalletOverviewState extends State<WalletOverview> {
   }
 }
 
-class _LineChart extends StatelessWidget {
+class _LineChart extends StatefulWidget {
+  static final assetValues = [
+    5.0,
+    6.0,
+    4.0,
+    7.0,
+    8.0,
+    5.0,
+    6.0,
+    5.0,
+    4.0,
+    5.0,
+    5.5
+  ];
+
+  static final depositValues = [
+    5.0,
+    5.0,
+    5.0,
+    5.0,
+    5.0,
+    5.0,
+    5.0,
+    5.0,
+    5.0,
+    5.0,
+    5.0
+  ];
+
+  @override
+  State<StatefulWidget> createState() => _LineChartState();
+}
+
+class _LineChartState extends State<_LineChart> {
+  int touchedIndex = -1;
+
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -72,72 +107,100 @@ class _LineChart extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            Expanded(child: LineChart(sampleData1)),
+            Expanded(child: LineChart(data)),
             const SizedBox(height: 20),
           ],
         ),
       ),
     );
   }
+
+  LineChartData get data => LineChartData(
+        lineTouchData: lineTouchData,
+        gridData: gridData,
+        titlesData: titlesData,
+        borderData: borderData,
+        lineBarsData: lineBarsData,
+        minX: 0,
+        maxX: 10,
+        maxY: 10,
+        minY: 0,
+      );
+
+  LineTouchData get lineTouchData => LineTouchData(
+        enabled: true,
+        handleBuiltInTouches: false,
+        touchCallback: (event, response) {
+          if (!event.isInterestedForInteractions ||
+              response == null ||
+              response.lineBarSpots == null) {
+            setState(() {
+              touchedIndex = -1;
+            });
+            return;
+          }
+          setState(() {
+            touchedIndex = response.lineBarSpots![0].x.toInt();
+          });
+        },
+      );
+
+  FlTitlesData get titlesData => FlTitlesData(
+        show: false,
+      );
+
+  List<LineChartBarData> get lineBarsData => [
+    lineChartBarDataDeposit,
+    lineChartBarDataAsset,
+      ];
+
+  FlGridData get gridData => FlGridData(show: false);
+
+  FlBorderData get borderData => FlBorderData(
+        show: true,
+        border: const Border(
+          bottom: BorderSide(color: Color(0xff4e4965), width: 4),
+          left: BorderSide(color: Colors.transparent),
+          right: BorderSide(color: Colors.transparent),
+          top: BorderSide(color: Colors.transparent),
+        ),
+      );
+
+  LineChartBarData get lineChartBarDataAsset => LineChartBarData(
+        isCurved: true,
+        color: const Color(0xff4af699),
+        barWidth: 3,
+        isStrokeCapRound: true,
+        dotData: FlDotData(
+            show: true,
+            checkToShowDot: (spot, barData) {
+              return spot.x == touchedIndex;
+            }),
+        belowBarData: BarAreaData(show: false),
+        spots: generateSpots(_LineChart.assetValues),
+      );
+
+  LineChartBarData get lineChartBarDataDeposit => LineChartBarData(
+        isCurved: true,
+        color: Colors.purple,
+        barWidth: 2,
+        isStrokeCapRound: true,
+        dashArray: [2, 4],
+        dotData: FlDotData(
+            show: true,
+            checkToShowDot: (spot, barData) {
+              return spot.x == touchedIndex;
+            }),
+        belowBarData: BarAreaData(show: false),
+        spots: generateSpots(_LineChart.depositValues),
+      );
+
+  List<FlSpot> generateSpots(List<double> values) {
+    return values.asMap().entries.map((e) {
+      return FlSpot(e.key.toDouble(), e.value);
+    }).toList();
+  }
 }
-
-LineChartData get sampleData1 => LineChartData(
-      lineTouchData: lineTouchData1,
-      gridData: gridData,
-      titlesData: titlesData1,
-      borderData: borderData,
-      lineBarsData: lineBarsData1,
-      minX: 0,
-      maxX: 10,
-      maxY: 10,
-      minY: 0,
-    );
-
-LineTouchData get lineTouchData1 => LineTouchData(
-      enabled: false,
-    );
-
-FlTitlesData get titlesData1 => FlTitlesData(
-      show: false,
-    );
-
-List<LineChartBarData> get lineBarsData1 => [
-      lineChartBarData1_1,
-    ];
-
-FlGridData get gridData => FlGridData(show: false);
-
-FlBorderData get borderData => FlBorderData(
-      show: true,
-      border: const Border(
-        bottom: BorderSide(color: Color(0xff4e4965), width: 4),
-        left: BorderSide(color: Colors.transparent),
-        right: BorderSide(color: Colors.transparent),
-        top: BorderSide(color: Colors.transparent),
-      ),
-    );
-
-LineChartBarData get lineChartBarData1_1 => LineChartBarData(
-      isCurved: true,
-      color: const Color(0xff4af699),
-      barWidth: 4,
-      isStrokeCapRound: true,
-      dotData: FlDotData(show: false),
-      belowBarData: BarAreaData(show: false),
-      spots: const [
-        FlSpot(0, 5),
-        FlSpot(1, 6),
-        FlSpot(2, 4),
-        FlSpot(3, 7),
-        FlSpot(4, 8),
-        FlSpot(5, 5),
-        FlSpot(6, 6),
-        FlSpot(7, 5),
-        FlSpot(8, 4),
-        FlSpot(9, 5),
-        FlSpot(10, 5.5),
-      ],
-    );
 
 class _Assets extends StatelessWidget {
   @override
@@ -260,8 +323,7 @@ class _CryptoWidget extends StatelessWidget {
     );
     return GestureDetector(
       onTap: () {
-        Navigator.of(context)
-            .push(_createRoute(() => const AssetOverview()));
+        Navigator.of(context).push(_createRoute(() => const AssetOverview()));
       },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -325,8 +387,8 @@ class _CryptoWidget extends StatelessWidget {
 Route _createRoute(Widget Function() createPage) {
   return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) {
-        return createPage();
-      }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    return createPage();
+  }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
     const begin = Offset(1.0, 0.0);
     const end = Offset.zero;
     var curve = Curves.ease;

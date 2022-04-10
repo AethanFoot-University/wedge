@@ -1,6 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../theme.dart';
 
@@ -17,6 +16,7 @@ class _AssetOverviewState extends State<AssetOverview> {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},
+        heroTag: "assetOverview",
         backgroundColor: Colors.green,
         label: const Text(
           "Buy",

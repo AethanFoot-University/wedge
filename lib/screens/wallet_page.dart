@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pnet/screens/wallet_history.dart';
 import 'package:pnet/screens/wallet_loans.dart';
-import 'package:pnet/screens/wallet_overview.dart';
+import 'package:pnet/screens/overview_page.dart';
 import 'package:pnet/theme.dart';
 
 class WalletPage extends StatefulWidget {
@@ -42,7 +42,7 @@ class _WalletPageState extends State<WalletPage> {
         body: const TabBarView(
           children: [
             WalletHistory(),
-            WalletOverview(),
+            OverviewPage(),
             WalletLoans(),
           ],
         ),
