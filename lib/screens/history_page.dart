@@ -14,31 +14,47 @@ class _WalletHistoryState extends State<WalletHistory> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ThemeColours.PRIMARY_BACKGROUND_COLOR,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        mini: true,
-        backgroundColor: Colors.green,
-        child: const Icon(Icons.search),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(16.0),
-        physics: const BouncingScrollPhysics(),
+      body: Column(
         children: [
-          const SizedBox(height: 20),
-          const Text(
-            "March 30, 2022",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 25.0,
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            alignment: Alignment.centerRight,
+            child: IconButton(onPressed: () {},
+                color: Colors.white54,
+                iconSize: 25.0,
+                icon: const Icon(Icons.search)),
+          ),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              physics: const BouncingScrollPhysics(),
+              children: [
+                const SizedBox(height: 20),
+                const Text(
+                  "March 30, 2022",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25.0,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                _Transactions(),
+                const SizedBox(height: 16),
+                const Text(
+                  "March 29, 2022",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25.0,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                _Transactions(),
+                const SizedBox(height: 16),
+              ],
             ),
           ),
-          const SizedBox(height: 16),
-          _Transactions(),
-          const SizedBox(height: 16),
         ],
       ),
     );

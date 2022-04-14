@@ -106,8 +106,34 @@ class _LineChartState extends State<_LineChart> {
                 fontSize: 16.0,
               ),
             ),
-            const SizedBox(height: 20),
-            Expanded(child: LineChart(data)),
+            const SizedBox(height: 10),
+            Expanded(child: Stack(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      touchedIndex == -1 ? "" : _LineChart.assetValues[touchedIndex].toString(),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 25.0,
+                      ),
+                    ),
+                    const SizedBox(width: 25),
+                    Text(
+                      touchedIndex == -1 ? "" : _LineChart.depositValues[touchedIndex].toString(),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 25.0,
+                      ),
+                    ),
+                  ],
+                ),
+                LineChart(data),
+              ],
+            )),
             const SizedBox(height: 20),
           ],
         ),
@@ -157,7 +183,7 @@ class _LineChartState extends State<_LineChart> {
   FlGridData get gridData => FlGridData(show: false);
 
   FlBorderData get borderData => FlBorderData(
-        show: true,
+        show: false,
         border: const Border(
           bottom: BorderSide(color: Color(0xff4e4965), width: 4),
           left: BorderSide(color: Colors.transparent),
@@ -168,7 +194,7 @@ class _LineChartState extends State<_LineChart> {
 
   LineChartBarData get lineChartBarDataAsset => LineChartBarData(
         isCurved: true,
-        color: const Color(0xff4af699),
+        color: Colors.greenAccent,
         barWidth: 3,
         isStrokeCapRound: true,
         dotData: FlDotData(

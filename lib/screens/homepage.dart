@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pnet/screens/settings_page.dart';
-import 'package:pnet/screens/wallet_history.dart';
-import 'package:pnet/screens/wallet_loans.dart';
+import 'package:pnet/screens/history_page.dart';
+import 'package:pnet/screens/loans_page.dart';
 import 'package:pnet/screens/overview_page.dart';
 import 'package:pnet/theme.dart';
 
