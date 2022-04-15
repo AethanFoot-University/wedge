@@ -6,15 +6,15 @@ import 'package:pnet/screens/loans_page.dart';
 import 'package:pnet/screens/overview_page.dart';
 import 'package:pnet/theme.dart';
 
-import 'invest_page.dart';
+import 'prices_page.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
   final String title;
   static const List<_BottomBarPage> widgetOptions = [
     _BottomBarPage(InvestPage(), Icons.show_chart, "Prices"),
-    _BottomBarPage(WalletLoans(), Icons.call_to_action, "Loans"),
-    _BottomBarPage(WalletHistory(), Icons.star, "History"),
+    _BottomBarPage(WalletLoans(), Icons.attach_money, "Loans"),
+    _BottomBarPage(WalletHistory(), Icons.history, "History"),
     _BottomBarPage(SettingsPage(), Icons.settings, "Settings")
   ];
 

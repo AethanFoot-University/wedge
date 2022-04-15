@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:pnet/screens/asset_screen.dart';
+import 'package:pnet/screens/asset_page.dart';
 
 import '../theme.dart';
 

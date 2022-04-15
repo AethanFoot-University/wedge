@@ -14,32 +14,33 @@ class _AssetOverviewState extends State<AssetOverview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
-        heroTag: "assetOverview",
-        backgroundColor: Colors.green,
-        label: const Text(
-          "Buy",
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 18.0,
-          ),
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-      ),
       backgroundColor: ThemeColours.PRIMARY_BACKGROUND_COLOR,
-      body: ListView(
-        padding: const EdgeInsets.all(16.0),
-        physics: const BouncingScrollPhysics(),
+      body: Column(
         children: [
-          const SizedBox(height: 20),
-          _LineChart(),
-          const SizedBox(height: 20),
-          _Assets(),
-          const SizedBox(height: 16),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.all(16.0),
+              physics: const BouncingScrollPhysics(),
+              children: [
+                const SizedBox(height: 20),
+                _LineChart(),
+                const SizedBox(height: 20),
+                _Assets(),
+                const SizedBox(height: 16),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            alignment: Alignment.centerLeft,
+            child: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                color: Colors.white54,
+                iconSize: 25.0,
+                icon: const Icon(Icons.arrow_back_rounded)),
+          ),
         ],
       ),
     );
@@ -205,6 +206,7 @@ class _Assets extends StatelessWidget {
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -230,6 +232,7 @@ class _Assets extends StatelessWidget {
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -255,6 +258,7 @@ class _Assets extends StatelessWidget {
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
