@@ -27,10 +27,9 @@ class _WalletLoansState extends State<WalletLoans> {
           ),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.all(16.0),
               physics: const BouncingScrollPhysics(),
               children: const [
-                SizedBox(height: 20),
                 Text(
                   "Outstanding Loans",
                   style: TextStyle(
@@ -84,6 +83,7 @@ class _WalletLoansState extends State<WalletLoans> {
                   minimumPayment: 100,
                   collateral: 5.0,
                 ),
+                SizedBox(height: 55.0),
               ],
             ),
           ),

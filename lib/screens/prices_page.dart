@@ -16,10 +16,9 @@ class _InvestPageState extends State<InvestPage> {
     return Scaffold(
       backgroundColor: ThemeColours.PRIMARY_BACKGROUND_COLOR,
       body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.all(16.0),
         physics: const BouncingScrollPhysics(),
         children: const [
-          SizedBox(height: 20),
           _CryptoWidget(
               name: "Bitcoin",
               shorName: "BTC",
@@ -94,6 +93,7 @@ class _InvestPageState extends State<InvestPage> {
               logo: "https://cryptologos.cc/logos/hex-hex-logo.png",
               value: 0.11,
               change: -2.09),
+          SizedBox(height: 55.0),
         ],
       ),
     );

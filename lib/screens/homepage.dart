@@ -33,33 +33,33 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ThemeColours.PRIMARY_BACKGROUND_COLOR,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _onItemTapped(MyHomePage.widgetOptions.length);
-        },
-        heroTag: null,
-        backgroundColor: Colors.green,
-        child: const Icon(Icons.home),
-      ),
-      body: Center(
-        child: SafeArea(
-          child: _selectedIndex == MyHomePage.widgetOptions.length
-              ? const OverviewPage()
-              : MyHomePage.widgetOptions.elementAt(_selectedIndex).page,
+    return SafeArea(
+      child: Scaffold(
+        //backgroundColor: ThemeColours.PRIMARY_BACKGROUND_COLOR,
+        extendBody: true,
+        backgroundColor: Colors.transparent,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            _onItemTapped(MyHomePage.widgetOptions.length);
+          },
+          heroTag: null,
+          backgroundColor: Colors.green,
+          child: const Icon(Icons.home),
         ),
+        body: _selectedIndex == MyHomePage.widgetOptions.length
+            ? const OverviewPage()
+            : MyHomePage.widgetOptions.elementAt(_selectedIndex).page,
+        bottomNavigationBar: _BottomBar(parent: this),
       ),
-      bottomNavigationBar: BottomBar(parent: this),
     );
   }
 }
 
-class BottomBar extends StatelessWidget {
+class _BottomBar extends StatelessWidget {
   final _MyHomePageState parent;
 
-  const BottomBar({Key? key, required this.parent}) : super(key: key);
+  const _BottomBar({Key? key, required this.parent}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,7 @@ class BottomBar extends StatelessWidget {
 
     return BottomAppBar(
       shape: const CircularNotchedRectangle(),
-      notchMargin: 5.0,
+      notchMargin: 4.0,
       color: const Color(0xff232323),
       child: Row(
         mainAxisSize: MainAxisSize.max,
@@ -85,7 +85,7 @@ class BottomBar extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const SizedBox(height: 24.0),
+        const SizedBox(height: 26.0),
         Text(
           "Home",
           style: TextStyle(color: color, fontSize: 11),
@@ -95,8 +95,8 @@ class BottomBar extends StatelessWidget {
   }
 
   List<Widget> _generateButtons() {
-    List<Widget> buttons = List.generate(MyHomePage.widgetOptions.length,
-        (index) => _generateButton(index));
+    List<Widget> buttons = List.generate(
+        MyHomePage.widgetOptions.length, (index) => _generateButton(index));
     return buttons;
   }
 

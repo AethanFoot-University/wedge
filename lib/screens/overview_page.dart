@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pnet/screens/asset_page.dart';
+import 'package:pnet/screens/wallet_page.dart';
 
 import '../theme.dart';
 
@@ -22,7 +23,7 @@ class _OverviewPageState extends State<OverviewPage> {
         physics: const BouncingScrollPhysics(),
         children: [
           _LineChart(),
-          const SizedBox(height: 20),
+          const SizedBox(height: 20.0),
           const Text(
             "Assets",
             style: TextStyle(
@@ -31,9 +32,9 @@ class _OverviewPageState extends State<OverviewPage> {
               fontSize: 25.0,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 16.0),
           _Assets(),
-          const SizedBox(height: 16),
+          const SizedBox(height: 55.0),
         ],
       ),
     );
@@ -42,35 +43,110 @@ class _OverviewPageState extends State<OverviewPage> {
 
 class _LineChart extends StatefulWidget {
   static final assetValues = [
-    5.0,
-    6.0,
-    4.0,
-    7.0,
-    8.0,
-    5.0,
-    6.0,
-    5.0,
-    4.0,
-    5.0,
-    5.5
+    12204.0286,
+    13173.312,
+    11853.610,
+    13796.772,
+    13307.373,
+    11025.513,
+    13209.888,
+    11199.407,
+    13463.613,
+    13780.130,
+    13478.514,
+    12064.558,
+    12416.196,
+    13736.075,
+    11459.049,
+    11141.638,
+    12830.791,
+    11303.831,
+    12500.725,
+    12076.150,
+    12364.534,
+    11577.138,
+    11914.052,
+    13823.585,
+    11400.691,
+    11350.849,
+    11552.297,
+    11736.860,
+    11521.535,
+    13519.143,
+    13298.73
   ];
 
   static final depositValues = [
-    5.0,
-    5.0,
-    5.0,
-    5.0,
-    5.0,
-    5.0,
-    5.0,
-    5.0,
-    5.0,
-    5.0,
-    5.0
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+    12204.0286,
+  ];
+
+  static final List<_DateButton> dateButtons = [
+    const _DateButton(name: "1D"),
+    const _DateButton(name: "1W"),
+    const _DateButton(name: "1M"),
+    const _DateButton(name: "3M"),
+    const _DateButton(name: "1Y"),
+    const _DateButton(name: "ALL"),
   ];
 
   @override
   State<StatefulWidget> createState() => _LineChartState();
+}
+
+class _DateButton extends StatelessWidget {
+  final String name;
+
+  const _DateButton({Key? key, required this.name}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Material(
+        color: ThemeColours.SECONDARY_BACKGROUND_COLOR,
+        child: InkWell(
+            borderRadius: BorderRadius.circular(8.0),
+            onTap: () {},
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                name,
+                style: const TextStyle(color: Colors.white, fontSize: 16.0),
+              ),
+            )),
+      ),
+    );
+  }
 }
 
 class _LineChartState extends State<_LineChart> {
@@ -99,7 +175,7 @@ class _LineChartState extends State<_LineChart> {
               ),
             ),
             const Text(
-              "8.97% (£1,192.90) Change",
+              "8.97% (£1,094.70) Change",
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.green,
@@ -107,38 +183,74 @@ class _LineChartState extends State<_LineChart> {
               ),
             ),
             const SizedBox(height: 10),
-            Expanded(child: Stack(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      touchedIndex == -1 ? "" : _LineChart.assetValues[touchedIndex].toString(),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 25.0,
-                      ),
-                    ),
-                    const SizedBox(width: 25),
-                    Text(
-                      touchedIndex == -1 ? "" : _LineChart.depositValues[touchedIndex].toString(),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 25.0,
-                      ),
-                    ),
-                  ],
-                ),
-                LineChart(data),
+                _valueWidget("Net Deposits", _LineChart.depositValues,
+                    Colors.greenAccent),
+                const SizedBox(width: 25),
+                _valueWidget(
+                    "Market Value", _LineChart.assetValues, Colors.purple)
               ],
-            )),
-            const SizedBox(height: 20),
+            ),
+            const SizedBox(height: 24.0),
+            Expanded(child: LineChart(data)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: _LineChart.dateButtons,
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Widget _valueWidget(String name, List<double> values, Color color) {
+    var currencyFormat = NumberFormat.currency(
+      locale: "en_UK",
+      name: "GBP",
+      symbol: "£",
+    );
+    return touchedIndex == -1
+        ? const SizedBox(height: 40.0)
+        : SizedBox(
+            height: 40.0,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 10.0,
+                  width: 10.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: color,
+                  ),
+                ),
+                const SizedBox(width: 8.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10.0,
+                      ),
+                    ),
+                    Text(
+                      currencyFormat.format(values[touchedIndex]),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
   }
 
   LineChartData get data => LineChartData(
@@ -148,9 +260,8 @@ class _LineChartState extends State<_LineChart> {
         borderData: borderData,
         lineBarsData: lineBarsData,
         minX: 0,
-        maxX: 10,
-        maxY: 10,
-        minY: 0,
+        maxX: _LineChart.depositValues.length.toDouble() - 1,
+        minY: 10000,
       );
 
   LineTouchData get lineTouchData => LineTouchData(
@@ -176,8 +287,8 @@ class _LineChartState extends State<_LineChart> {
       );
 
   List<LineChartBarData> get lineBarsData => [
-    lineChartBarDataDeposit,
-    lineChartBarDataAsset,
+        lineChartBarDataDeposit,
+        lineChartBarDataAsset,
       ];
 
   FlGridData get gridData => FlGridData(show: false);
@@ -240,53 +351,60 @@ class _Assets extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 16.0, 0.0, 0.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          "Wallet",
-                          style:
-                              TextStyle(color: Colors.white70, fontSize: 18.0),
-                        ),
-                        Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-                        Text(
-                          "£13,298.73",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 25.0,
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () {
+                Navigator.of(context)
+                    .push(_createRoute(() => const WalletPage()));
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 0.0, 0.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            "Wallet",
+                            style: TextStyle(
+                                color: Colors.white70, fontSize: 18.0),
                           ),
-                        ),
-                      ],
+                          Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
+                          Text(
+                            "£13,298.73",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25.0,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(0.0, 16.0, 8.0, 0.0),
-                  child: Text(
-                    "5",
-                    style: TextStyle(
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(0.0, 16.0, 8.0, 0.0),
+                    child: Text(
+                      "5",
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 0.0),
+                    child: Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 16.0,
                       color: Colors.white70,
-                      fontSize: 16.0,
                     ),
                   ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 0.0),
-                  child: Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    size: 16.0,
-                    color: Colors.white70,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
             const _CryptoWidget(
                 type: "Titano",
@@ -348,6 +466,7 @@ class _CryptoWidget extends StatelessWidget {
       symbol: "£",
     );
     return GestureDetector(
+      behavior: HitTestBehavior.translucent,
       onTap: () {
         Navigator.of(context).push(_createRoute(() => const AssetOverview()));
       },

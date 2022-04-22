@@ -26,10 +26,9 @@ class _WalletHistoryState extends State<WalletHistory> {
           ),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.all(16.0),
               physics: const BouncingScrollPhysics(),
               children: [
-                const SizedBox(height: 20),
                 const Text(
                   "March 30, 2022",
                   style: TextStyle(
@@ -38,9 +37,9 @@ class _WalletHistoryState extends State<WalletHistory> {
                     fontSize: 25.0,
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 16.0),
                 _Transactions(),
-                const SizedBox(height: 16),
+                const SizedBox(height: 16.0),
                 const Text(
                   "March 29, 2022",
                   style: TextStyle(
@@ -49,9 +48,9 @@ class _WalletHistoryState extends State<WalletHistory> {
                     fontSize: 25.0,
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 16.0),
                 _Transactions(),
-                const SizedBox(height: 16),
+                const SizedBox(height: 55.0),
               ],
             ),
           ),
