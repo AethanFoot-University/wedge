@@ -14,6 +14,14 @@ class OverviewPage extends StatefulWidget {
 }
 
 class _OverviewPageState extends State<OverviewPage> {
+  bool showingAll = true;
+
+  onAssetHold(bool isAll) {
+    setState(() {
+      showingAll = isAll;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +30,7 @@ class _OverviewPageState extends State<OverviewPage> {
         padding: const EdgeInsets.all(16.0),
         physics: const BouncingScrollPhysics(),
         children: [
-          _LineChart(),
+          _LineChart(parent: this),
           const SizedBox(height: 20.0),
           const Text(
             "Assets",
@@ -33,7 +41,7 @@ class _OverviewPageState extends State<OverviewPage> {
             ),
           ),
           const SizedBox(height: 16.0),
-          _Assets(),
+          _Assets(parent: this),
           const SizedBox(height: 55.0),
         ],
       ),
@@ -42,6 +50,8 @@ class _OverviewPageState extends State<OverviewPage> {
 }
 
 class _LineChart extends StatefulWidget {
+  final _OverviewPageState parent;
+
   static final assetValues = [
     12204.0286,
     13173.312,
@@ -110,50 +120,106 @@ class _LineChart extends StatefulWidget {
     12204.0286,
   ];
 
-  static final List<_DateButton> dateButtons = [
-    const _DateButton(name: "1D"),
-    const _DateButton(name: "1W"),
-    const _DateButton(name: "1M"),
-    const _DateButton(name: "3M"),
-    const _DateButton(name: "1Y"),
-    const _DateButton(name: "ALL"),
+  static final titanoAsset = [
+    5494.9775,
+    5653.624,
+    5555.396,
+    5325.503,
+    5754.080,
+    5736.883,
+    5414.521,
+    5326.416,
+    5431.807,
+    5623.637,
+    5749.313,
+    5342.703,
+    5545.479,
+    5544.490,
+    5769.683,
+    5519.177,
+    5757.533,
+    5345.816,
+    5589.283,
+    5722.729,
+    5716.650,
+    5425.357,
+    5705.061,
+    5608.249,
+    5521.730,
+    5455.107,
+    5514.789,
+    5591.571,
+    5339.598,
+    5684.933,
+    5623.56
   ];
+
+  static final titanoDeposit = [
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775,
+    5494.9775
+  ];
+
+  static final List<_DateButton> dateButtons = [
+    const _DateButton(name: "1D", length: 2),
+    const _DateButton(name: "1W", length: 7),
+    const _DateButton(name: "1M", length: 31),
+    const _DateButton(name: "3M", length: 93),
+    const _DateButton(name: "1Y", length: 365),
+    _DateButton(name: "ALL", length: assetValues.length),
+  ];
+
+  const _LineChart({Key? key, required this.parent}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _LineChartState();
 }
 
-class _DateButton extends StatelessWidget {
+class _DateButton {
   final String name;
+  final int length;
 
-  const _DateButton({Key? key, required this.name}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Material(
-        color: ThemeColours.SECONDARY_BACKGROUND_COLOR,
-        child: InkWell(
-            borderRadius: BorderRadius.circular(8.0),
-            onTap: () {},
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                name,
-                style: const TextStyle(color: Colors.white, fontSize: 16.0),
-              ),
-            )),
-      ),
-    );
-  }
+  const _DateButton({
+    required this.name,
+    required this.length,
+  });
 }
 
 class _LineChartState extends State<_LineChart> {
   int touchedIndex = -1;
+  int dateIndex = 5;
 
   @override
   Widget build(BuildContext context) {
+    bool showingAll = widget.parent.showingAll;
     return ClipRRect(
       borderRadius: BorderRadius.circular(8.0),
       child: Container(
@@ -165,19 +231,20 @@ class _LineChartState extends State<_LineChart> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 20),
-            const Text(
-              "£13,298.73",
+            Text(
+              showingAll ? "£13,298.73" : "£5623.56",
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 35.0,
               ),
             ),
-            const Text(
-              "8.97% (£1,094.70) Change",
+            Text(
+              (showingAll ? "8.97% (£1,094.70)" : "2.34% (£128.58)") +
+                  " Change",
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.green,
                 fontSize: 16.0,
               ),
@@ -186,18 +253,24 @@ class _LineChartState extends State<_LineChart> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _valueWidget("Net Deposits", _LineChart.depositValues,
-                    Colors.greenAccent),
+                _valueWidget(
+                    "Net Deposits",
+                    depositValues
+                        .sublist(_LineChart.assetValues.length - dateLength),
+                    Colors.purple),
                 const SizedBox(width: 25),
                 _valueWidget(
-                    "Market Value", _LineChart.assetValues, Colors.purple)
+                    "Market Value",
+                    assetValues
+                        .sublist(_LineChart.assetValues.length - dateLength),
+                    Colors.greenAccent)
               ],
             ),
             const SizedBox(height: 24.0),
             Expanded(child: LineChart(data)),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: _LineChart.dateButtons,
+              children: _generateDateButtons(),
             ),
           ],
         ),
@@ -214,57 +287,105 @@ class _LineChartState extends State<_LineChart> {
     return touchedIndex == -1
         ? const SizedBox(height: 40.0)
         : SizedBox(
-            height: 40.0,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 10.0,
-                  width: 10.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    color: color,
-                  ),
-                ),
-                const SizedBox(width: 8.0),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 10.0,
-                      ),
-                    ),
-                    Text(
-                      currencyFormat.format(values[touchedIndex]),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20.0,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+      height: 40.0,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 10.0,
+            width: 10.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+              color: color,
             ),
-          );
+          ),
+          const SizedBox(width: 8.0),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                name,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 10.0,
+                ),
+              ),
+              Text(
+                currencyFormat.format(values[touchedIndex]),
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
-  LineChartData get data => LineChartData(
+  List<Widget> _generateDateButtons() {
+    return List.generate(
+        _LineChart.dateButtons.length, (index) => _generateDateButton(index));
+  }
+
+  Widget _generateDateButton(int index) {
+    bool selected = dateIndex == index;
+    Color color = selected ? Colors.green : Colors.white;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Material(
+        color: ThemeColours.SECONDARY_BACKGROUND_COLOR,
+        child: InkWell(
+            borderRadius: BorderRadius.circular(8.0),
+            onTap: () {
+              setState(() {
+                dateIndex = index;
+              });
+            },
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                _LineChart.dateButtons[index].name,
+                style: TextStyle(color: color, fontSize: 16.0),
+              ),
+            )),
+      ),
+    );
+  }
+
+  int get dateLength {
+    int assetLength = _LineChart.assetValues.length;
+    int dateLength = _LineChart.dateButtons[dateIndex].length;
+    return dateLength > assetLength ? assetLength : dateLength;
+  }
+
+  List<double> get assetValues {
+    return widget.parent.showingAll ? _LineChart.assetValues : _LineChart
+        .titanoAsset;
+  }
+
+  List<double> get depositValues {
+    return widget.parent.showingAll ? _LineChart.depositValues : _LineChart
+        .titanoDeposit;
+  }
+
+  LineChartData get data =>
+      LineChartData(
         lineTouchData: lineTouchData,
         gridData: gridData,
         titlesData: titlesData,
         borderData: borderData,
         lineBarsData: lineBarsData,
         minX: 0,
-        maxX: _LineChart.depositValues.length.toDouble() - 1,
-        minY: 10000,
+        maxX: dateLength.toDouble() - 1.0,
+        minY: widget.parent.showingAll ? 10000 : 5000,
       );
 
-  LineTouchData get lineTouchData => LineTouchData(
+  LineTouchData get lineTouchData =>
+      LineTouchData(
         enabled: true,
         handleBuiltInTouches: false,
         touchCallback: (event, response) {
@@ -282,18 +403,21 @@ class _LineChartState extends State<_LineChart> {
         },
       );
 
-  FlTitlesData get titlesData => FlTitlesData(
+  FlTitlesData get titlesData =>
+      FlTitlesData(
         show: false,
       );
 
-  List<LineChartBarData> get lineBarsData => [
+  List<LineChartBarData> get lineBarsData =>
+      [
         lineChartBarDataDeposit,
         lineChartBarDataAsset,
       ];
 
   FlGridData get gridData => FlGridData(show: false);
 
-  FlBorderData get borderData => FlBorderData(
+  FlBorderData get borderData =>
+      FlBorderData(
         show: false,
         border: const Border(
           bottom: BorderSide(color: Color(0xff4e4965), width: 4),
@@ -303,7 +427,8 @@ class _LineChartState extends State<_LineChart> {
         ),
       );
 
-  LineChartBarData get lineChartBarDataAsset => LineChartBarData(
+  LineChartBarData get lineChartBarDataAsset =>
+      LineChartBarData(
         isCurved: true,
         color: Colors.greenAccent,
         barWidth: 3,
@@ -314,10 +439,12 @@ class _LineChartState extends State<_LineChart> {
               return spot.x == touchedIndex;
             }),
         belowBarData: BarAreaData(show: false),
-        spots: generateSpots(_LineChart.assetValues),
+        spots: generateSpots(assetValues
+            .sublist(_LineChart.assetValues.length - dateLength)),
       );
 
-  LineChartBarData get lineChartBarDataDeposit => LineChartBarData(
+  LineChartBarData get lineChartBarDataDeposit =>
+      LineChartBarData(
         isCurved: true,
         color: Colors.purple,
         barWidth: 2,
@@ -329,17 +456,25 @@ class _LineChartState extends State<_LineChart> {
               return spot.x == touchedIndex;
             }),
         belowBarData: BarAreaData(show: false),
-        spots: generateSpots(_LineChart.depositValues),
+        spots: generateSpots(depositValues
+            .sublist(_LineChart.depositValues.length - dateLength)),
       );
 
   List<FlSpot> generateSpots(List<double> values) {
-    return values.asMap().entries.map((e) {
+    return values
+        .asMap()
+        .entries
+        .map((e) {
       return FlSpot(e.key.toDouble(), e.value);
     }).toList();
   }
 }
 
 class _Assets extends StatelessWidget {
+  final _OverviewPageState parent;
+
+  const _Assets({Key? key, required this.parent}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -353,6 +488,9 @@ class _Assets extends StatelessWidget {
           children: [
             GestureDetector(
               behavior: HitTestBehavior.translucent,
+              onLongPress: () {
+                parent.onAssetHold(true);
+              },
               onTap: () {
                 Navigator.of(context)
                     .push(_createRoute(() => const WalletPage()));
@@ -406,32 +544,38 @@ class _Assets extends StatelessWidget {
                 ],
               ),
             ),
-            const _CryptoWidget(
+            _CryptoWidget(
+                parent: parent,
                 type: "Titano",
                 balance: 5623.56,
                 total: 41599.87,
                 change: 2.34),
-            const _CryptoWidget(
+            _CryptoWidget(
+                parent: parent,
                 type: "Ethereum",
                 balance: 2586.34,
                 total: 0.9990034455,
                 change: 4.25),
-            const _CryptoWidget(
+            _CryptoWidget(
+                parent: parent,
                 type: "Terra",
                 balance: 1694.81,
                 total: 20.8720443349,
                 change: -0.84),
-            const _CryptoWidget(
+            _CryptoWidget(
+                parent: parent,
                 type: "Dogecoin",
                 balance: 1357.88,
                 total: 12478.3355847783,
                 change: 20.65),
-            const _CryptoWidget(
+            _CryptoWidget(
+                parent: parent,
                 type: "Bitcoin",
                 balance: 1067.72,
                 total: 0.0297148436,
                 change: 1.23),
-            const _CryptoWidget(
+            _CryptoWidget(
+                parent: parent,
                 type: "BNB",
                 balance: 968.42,
                 total: 2.9056377329,
@@ -451,8 +595,10 @@ class _CryptoWidget extends StatelessWidget {
     required this.balance,
     required this.total,
     required this.change,
+    required this.parent,
   }) : super(key: key);
 
+  final _OverviewPageState parent;
   final String type;
   final double balance;
   final double total;
@@ -467,6 +613,9 @@ class _CryptoWidget extends StatelessWidget {
     );
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
+      onLongPress: () {
+        parent.onAssetHold(false);
+      },
       onTap: () {
         Navigator.of(context).push(_createRoute(() => const AssetOverview()));
       },
@@ -532,8 +681,8 @@ class _CryptoWidget extends StatelessWidget {
 Route _createRoute(Widget Function() createPage) {
   return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) {
-    return createPage();
-  }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return createPage();
+      }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
     const begin = Offset(1.0, 0.0);
     const end = Offset.zero;
     var curve = Curves.ease;

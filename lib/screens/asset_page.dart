@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../theme.dart';
 
@@ -24,7 +25,62 @@ class _AssetOverviewState extends State<AssetOverview> {
               children: [
                 const SizedBox(height: 20),
                 _LineChart(),
-                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0.0, 8.0, 8.0, 8.0),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(8.0),
+                        onTap: () {},
+                        child: Container(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: const [
+                              Text(
+                                "Similar Products",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18.0,
+                                ),
+                              ),
+                              SizedBox(width: 4.0),
+                              Icon(
+                                Icons.arrow_circle_up,
+                                color: Colors.white54,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0.0, 8.0, 8.0, 8.0),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(8.0),
+                        onTap: _launchURL,
+                        child: Container(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: const [
+                              Text(
+                                "Discord",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18.0,
+                                ),
+                              ),
+                              SizedBox(width: 4.0),
+                              Icon(
+                                Icons.arrow_circle_up,
+                                color: Colors.white54,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
                 _Assets(),
                 const SizedBox(height: 16),
               ],
@@ -44,6 +100,10 @@ class _AssetOverviewState extends State<AssetOverview> {
         ],
       ),
     );
+  }
+  _launchURL() async {
+    Uri url = Uri.parse("https://discord.com/invite/xxdS792B7q");
+    if (!await launchUrl(url)) throw 'Could not launch $url';
   }
 }
 
@@ -164,121 +224,146 @@ LineChartBarData get lineChartBarData1_1 => LineChartBarData(
 class _Assets extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: ThemeColours.SECONDARY_BACKGROUND_COLOR,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16.0, 16.0, 0.0, 0.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Equity 42.29%",
-                style: TextStyle(color: Colors.white70, fontSize: 18.0),
-              ),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-              const Text(
-                "£5623.56",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25.0,
-                ),
-              ),
-              const Text(
-                "41599.87 TITANO",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.0,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: const [
-                  Expanded(
-                    flex: 3,
-                    child: Text(
-                      "Average Cost",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: ThemeColours.SECONDARY_BACKGROUND_COLOR,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 16.0, 0.0, 0.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Equity 42.29%",
+                    style: TextStyle(color: Colors.white70, fontSize: 18.0),
+                  ),
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
+                  const Text(
+                    "£5623.56",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25.0,
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 0.0),
-                    child: Text(
-                      "£0.1458",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.0,
-                      ),
+                  const Text(
+                    "41599.87 TITANO",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
                     ),
                   ),
+                  const SizedBox(height: 16),
+                  infoRow("Average Cost", "£0.1458", null),
+                  const SizedBox(height: 16),
+                  infoRow("Paid Fees", "£17.38", null),
+                  const SizedBox(height: 16),
+                  infoRow("24-Hour Return", "1.47% (£82.67)", null),
+                  const SizedBox(height: 16),
                 ],
               ),
-              const SizedBox(height: 16),
-              Row(
-                children: const [
-                  Expanded(
-                    flex: 3,
-                    child: Text(
-                      "Paid Fees",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 0.0),
-                    child: Text(
-                      "£17.38",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.0,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: const [
-                  Expanded(
-                    flex: 3,
-                    child: Text(
-                      "24-Hour Return",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 0.0),
-                    child: Text(
-                      "1.47% (£82.67)",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.0,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-            ],
+            ),
           ),
         ),
-      ),
+        const SizedBox(height: 16),
+        const Text(
+          "Stats",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 25.0,
+          ),
+        ),
+        const SizedBox(height: 8.0),
+        ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: Container(
+                decoration: BoxDecoration(
+                  color: ThemeColours.SECONDARY_BACKGROUND_COLOR,
+                ),
+                child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 20.0, 0.0, 0.0),
+                    child: Column(
+                      children: [
+                        infoRow("Market Cap", "£0.00", null),
+                        const SizedBox(height: 20),
+                        infoRow("Trading Volume", "£302,267", null),
+                        const SizedBox(height: 20),
+                        infoRow("Fully Diluted Value", "£561.44M", null),
+                        const SizedBox(height: 20),
+                        infoRow("1 Year Low", "£0.0094", null),
+                        const SizedBox(height: 20),
+                        infoRow("1 Year High", "£0.2011", null),
+                        const SizedBox(height: 20),
+                      ],
+                    )))),
+        const SizedBox(height: 16),
+        const Text(
+          "Performance",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 25.0,
+          ),
+        ),
+        const SizedBox(height: 8.0),
+        ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: Container(
+                decoration: BoxDecoration(
+                  color: ThemeColours.SECONDARY_BACKGROUND_COLOR,
+                ),
+                child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 20.0, 0.0, 0.0),
+                    child: Column(
+                      children: [
+                        infoRow("1 Day", "-2.1%", Colors.red),
+                        const SizedBox(height: 20),
+                        infoRow("1 week", "14.3%", Colors.green),
+                        const SizedBox(height: 20),
+                        infoRow("1 Month", "2.34%", Colors.green),
+                        const SizedBox(height: 20),
+                        infoRow("3 Month", "-16.32%", Colors.red),
+                        const SizedBox(height: 20),
+                        infoRow("1 Year", "43.61%", Colors.green),
+                        const SizedBox(height: 20),
+                      ],
+                    )))),
+      ],
+    );
+  }
+
+  Widget infoRow(String name, String data, Color? color) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 3,
+          child: Text(
+            name,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0.0, 0.0, 16.0, 0.0),
+          child: Text(
+            data,
+            style: TextStyle(
+              color: color ?? Colors.white,
+              fontSize: 18.0,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
