@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pnet/screens/settings_page.dart';
-import 'package:pnet/screens/history_page.dart';
-import 'package:pnet/screens/loans_page.dart';
-import 'package:pnet/screens/overview_page.dart';
+import 'package:pnet/pages/settings_page.dart';
+import 'package:pnet/pages/history_page.dart';
+import 'package:pnet/pages/loans_page.dart';
+import 'package:pnet/pages/overview_page.dart';
 import 'package:pnet/theme.dart';
 
 import 'prices_page.dart';

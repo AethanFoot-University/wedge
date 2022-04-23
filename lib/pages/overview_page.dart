@@ -1,8 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:pnet/screens/asset_page.dart';
-import 'package:pnet/screens/wallet_page.dart';
+import 'package:pnet/pages/asset_page.dart';
+import 'package:pnet/pages/wallet_page.dart';
 
 import '../theme.dart';
 

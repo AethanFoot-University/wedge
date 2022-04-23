@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:pnet/pages/similar_products_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../theme.dart';
@@ -23,7 +24,6 @@ class _AssetOverviewState extends State<AssetOverview> {
               padding: const EdgeInsets.all(16.0),
               physics: const BouncingScrollPhysics(),
               children: [
-                const SizedBox(height: 20),
                 _LineChart(),
                 Row(
                   children: [
@@ -31,7 +31,10 @@ class _AssetOverviewState extends State<AssetOverview> {
                       padding: const EdgeInsets.fromLTRB(0.0, 8.0, 8.0, 8.0),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(8.0),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.of(context).push(
+                              _createRoute(() => const SimilarProductsPage()));
+                        },
                         child: Container(
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
@@ -101,6 +104,7 @@ class _AssetOverviewState extends State<AssetOverview> {
       ),
     );
   }
+
   _launchURL() async {
     Uri url = Uri.parse("https://discord.com/invite/xxdS792B7q");
     if (!await launchUrl(url)) throw 'Could not launch $url';
@@ -366,4 +370,25 @@ class _Assets extends StatelessWidget {
       ],
     );
   }
+}
+
+Route _createRoute(Widget Function() createPage) {
+  return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) {
+    return createPage();
+  }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    const begin = Offset(1.0, 0.0);
+    const end = Offset.zero;
+    var curve = Curves.ease;
+    var curveTween = CurveTween(curve: curve);
+    final tween = Tween(begin: begin, end: end).chain(curveTween);
+    final offsetAnimation = animation.drive(tween);
+
+    return SlideTransition(
+      position: offsetAnimation,
+      child: SafeArea(
+        child: child,
+      ),
+    );
+  });
 }
