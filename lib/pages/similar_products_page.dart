@@ -153,55 +153,60 @@ class _RiskSection extends StatelessWidget {
                       ],
                     ),
                   ),
-                  ...List.generate(cards.length, (index) => _riskCard(index)),
+                  ...List.generate(cards.length, (index) => _riskCard(context, index)),
                   const SizedBox(height: 8.0),
                 ],
               ))),
     );
   }
 
-  Widget _riskCard(index) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(
-            width: 80.0,
-            child: Text(
-              cards[index].name,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16.0,
-                fontWeight: FontWeight.w500,
+  Widget _riskCard(context, index) {
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).pop();
+      },
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              width: 80.0,
+              child: Text(
+                cards[index].name,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            width: 60.0,
-            child: Text(
-              cards[index].apy.toString() + "%",
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16.0,
-                fontWeight: FontWeight.w500,
+            SizedBox(
+              width: 60.0,
+              child: Text(
+                cards[index].apy.toString() + "%",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            width: 30.0,
-            child: Text(
-              cards[index].age,
-              textAlign: TextAlign.right,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16.0,
-                fontWeight: FontWeight.w500,
+            SizedBox(
+              width: 30.0,
+              child: Text(
+                cards[index].age,
+                textAlign: TextAlign.right,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
-          ),
-          const Icon(Icons.arrow_forward_ios, color: Colors.white54, size: 14.0,)
-        ],
+            const Icon(Icons.arrow_forward_ios, color: Colors.white54, size: 14.0,)
+          ],
+        ),
       ),
     );
   }
