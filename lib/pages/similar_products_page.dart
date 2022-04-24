@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pnet/pages/asset_page2.dart';
 
 import '../theme.dart';
 
@@ -163,7 +164,7 @@ class _RiskSection extends StatelessWidget {
   Widget _riskCard(context, index) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).pop();
+        Navigator.of(context).push(_createRoute(() => const Asset2Overview()));
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
@@ -218,4 +219,25 @@ class _RiskCard {
   final String age;
 
   _RiskCard(this.name, this.apy, this.age);
+}
+
+Route _createRoute(Widget Function() createPage) {
+  return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return createPage();
+      }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    const begin = Offset(1.0, 0.0);
+    const end = Offset.zero;
+    var curve = Curves.ease;
+    var curveTween = CurveTween(curve: curve);
+    final tween = Tween(begin: begin, end: end).chain(curveTween);
+    final offsetAnimation = animation.drive(tween);
+
+    return SlideTransition(
+      position: offsetAnimation,
+      child: SafeArea(
+        child: child,
+      ),
+    );
+  });
 }
