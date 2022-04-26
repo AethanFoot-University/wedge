@@ -247,7 +247,7 @@ class _ConnectButtons extends StatelessWidget {
                 "Metamask"),
             _connectButton(
                 context,
-                "https://logos-download.com/wp-content/uploads/2018/04/Binance_logo_coin.png",
+                "https://logos-download.com/wp-content/uploads/2018/04/Binance_logo_coin-136x136.png",
                 null,
                 "Binance Wallet"),
           ],
@@ -257,7 +257,7 @@ class _ConnectButtons extends StatelessWidget {
           children: [
             _connectButton(
                 context,
-                "https://cdn.icon-icons.com/icons2/2407/PNG/512/coinbase_icon_146203.png",
+                "https://lh3.googleusercontent.com/rq5wUrwR5zZKqRQol3IfwOENAKDH51RHrqLS2Mq8ttsN7Nt8DSaib6M7Ng0ZiwtOsoM=w300",
                 null,
                 "Coinbase Wallet"),
             _connectButton(context, null, Icons.more_horiz, "More"),
@@ -288,9 +288,7 @@ class _ConnectButtons extends StatelessWidget {
                       size: 40,
                       color: Colors.white,
                     ),
-              const SizedBox(
-                height: 8.0
-              ),
+              const SizedBox(height: 8.0),
               Text(
                 name,
                 style: const TextStyle(

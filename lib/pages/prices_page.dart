@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pnet/theme.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class InvestPage extends StatefulWidget {
   const InvestPage({Key? key}) : super(key: key);
@@ -123,31 +124,55 @@ class _CryptoWidget extends StatelessWidget {
       name: "GBP",
       symbol: "£",
     );
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8.0),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-        decoration: BoxDecoration(
-          color: ThemeColours.SECONDARY_BACKGROUND_COLOR,
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 50,
-              width: 50,
-              child: Image.network(logo),
-            ),
-            const SizedBox(
-              width: 8.0,
-            ),
-            Expanded(
-              flex: 3,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: _launchURL,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8.0),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+          decoration: BoxDecoration(
+            color: ThemeColours.SECONDARY_BACKGROUND_COLOR,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 50,
+                width: 50,
+                child: Image.network(logo),
+              ),
+              const SizedBox(
+                width: 8.0,
+              ),
+              Expanded(
+                flex: 3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
+                    Text(
+                      shorName,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 15.0,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Column(
                 children: [
                   Text(
-                    name,
+                    currencyFormat.format(value),
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18.0,
@@ -156,38 +181,23 @@ class _CryptoWidget extends StatelessWidget {
                   ),
                   const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
                   Text(
-                    shorName,
-                    style: const TextStyle(
-                      color: Colors.white70,
-                      fontSize: 15.0,
+                    "${change.toString()}%",
+                    style: TextStyle(
+                      color: change.isNegative ? Colors.red : Colors.green,
+                      fontSize: 16.0,
                     ),
-                  )
+                  ),
                 ],
               ),
-            ),
-            Column(
-              children: [
-                Text(
-                  currencyFormat.format(value),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-                Text(
-                  "${change.toString()}%",
-                  style: TextStyle(
-                    color: change.isNegative ? Colors.red : Colors.green,
-                    fontSize: 16.0,
-                  ),
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  _launchURL() async {
+    Uri url = Uri.parse("https://www.binance.com/en/buy-sell-crypto");
+    if (!await launchUrl(url)) throw 'Could not launch $url';
   }
 }
